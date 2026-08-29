@@ -40,3 +40,5 @@ if (process.env.NODE_ENV !== "production") {
     console.log(`Tournament backend running on http://localhost:${port}`);
   });
 }
+
+module.exports = app;
