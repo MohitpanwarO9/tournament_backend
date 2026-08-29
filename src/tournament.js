@@ -1,5 +1,5 @@
-const POOL_A = ["Affan", "Harendra", "Tajamul", "Kushagra", "Harsh"];
-const POOL_B = ["Mohit", "Anand", "Mayuresh", "Amitesh", "Fadil", "Prayas"];
+const POOL_A = ["Affan", "Harendra", "Tajamul", "Kushagra", "Harsh", "Mayuresh"];
+const POOL_B = ["Mohit", "Anand", "Aniket", "Amitesh", "Fadil", "Prayas"];
 
 function roundRobin(players) {
   const arr = [...players];

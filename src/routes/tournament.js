@@ -153,9 +153,13 @@ router.post("/matches/:stage/:matchId", requireAdmin, async (req, res, next) => 
     if (!Number.isInteger(index) || !sch.fixtures[index]) {
       return res.status(404).json({ error: "Match not found." });
     }
+  
 
     const pair = sch.fixtures[index].pair;
+
+    if (!state[stage]) state[stage] = {};
     const previous = state[stage][matchId];
+
 
     if (previous?.done) {
       return res.status(409).json({
