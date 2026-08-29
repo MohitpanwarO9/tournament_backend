@@ -34,6 +34,9 @@ app.use((err, req, res, next) => {
 });
 
 const port = Number(process.env.PORT || 3000);
-app.listen(port, () => {
-  console.log(`Tournament backend running on http://localhost:${port}`);
-});
+
+if (process.env.NODE_ENV !== "production") {
+  app.listen(port, () => {
+    console.log(`Tournament backend running on http://localhost:${port}`);
+  });
+}
