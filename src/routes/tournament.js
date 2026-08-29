@@ -12,7 +12,14 @@ const router = express.Router();
 async function getState() {
   const db = initFirebase();
   const snap = await db.ref("tournament").get();
-  return snap.exists() ? (snap.val() || emptyState()) : emptyState();
+  const raw = snap.exists() ? (snap.val() || {}) : {};
+  return {
+    A:  raw.A  || {},
+    B:  raw.B  || {},
+    QA: raw.QA || {},
+    QB: raw.QB || {},
+    KO: raw.KO || {}
+  };
 }
 
 async function saveState(state) {
