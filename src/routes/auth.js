@@ -1,6 +1,7 @@
 const express = require("express");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
+const { requireAdmin } = require("../middleware/auth");
 
 const router = express.Router();
 
@@ -28,7 +29,7 @@ router.post("/login", (req, res) => {
     if (expected.length !== suppliedHash.length) return false;
     return crypto.timingSafeEqual(
       Buffer.from(expected, "utf8"),
-      Buffer.from(suppliedHash, "utf8")
+      Buffer.from(suppliedHash, "utf8"),
     );
   });
 
@@ -36,13 +37,31 @@ router.post("/login", (req, res) => {
     return res.status(401).json({ error: "Wrong password." });
   }
 
-  const token = jwt.sign(
-    { role: "admin" },
-    process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES_IN || "12h" }
-  );
+  const token = jwt.sign({ role: "admin" }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN || "12h",
+  });
 
   res.json({ token, role: "admin" });
+});
+
+router.get("/check", async (req, res) => {
+  try {
+    const header = req.headers.authorization || "";
+    const token = header.startsWith("Bearer ") ? header.slice(7) : null;
+
+    if (!token) {
+      // console.log("urning null")
+      return res.status(452).json({message : "not admin"});
+    }
+    const check = jwt.verify(token, process.env.JWT_SECRET);
+    // console.log(check);
+    if(check.role === "admin"){
+      return res.status(200).json({message : "yes admin"});
+    }
+    
+  } catch (err) {
+    return res.status(452).json({message: "not admin"});
+  }
 });
 
 module.exports = router;
